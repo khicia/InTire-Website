@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>InTIRE — AI Tire Defect Inspection</title>
 <meta name="description" content="InTIRE uses AI-powered image detection to spot tire cracks, bulges, punctures and worn treads before they become a problem." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FF5A1F%22/></svg>" />
+<link rel="icon" href="logo.png" type="image/png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -18,23 +18,8 @@
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
     <a href="#top" class="brand" aria-label="InTIRE home">
-      <!-- Swap this block for your logo file: <img src="logo.png" alt="InTIRE logo" class="brand-logo" /> -->
-      <span class="brand-logo brand-logo-placeholder" aria-hidden="true">
-        <svg viewBox="0 0 40 40" width="30" height="30">
-          <circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="3"/>
-          <circle cx="20" cy="20" r="6" fill="currentColor"/>
-          <g stroke="currentColor" stroke-width="3" stroke-linecap="round">
-            <line x1="20" y1="3" x2="20" y2="9"/>
-            <line x1="20" y1="31" x2="20" y2="37"/>
-            <line x1="3" y1="20" x2="9" y2="20"/>
-            <line x1="31" y1="20" x2="37" y2="20"/>
-          </g>
-        </svg>
-      </span>
-      <span class="brand-text">
-        <span class="brand-name">INTIRE</span>
-        <span class="brand-tagline">AI Tire Defect Inspection</span>
-      </span>
+      <span class="brand-logo-wrap"><img src="logo.png" alt="InTIRE" class="brand-logo" /></span>
+      <span class="brand-tagline">AI Tire Defect Inspection</span>
     </a>
 
     <nav class="main-nav" id="mainNav" aria-label="Primary">
@@ -161,6 +146,14 @@
           </span>
           <h3>AI detection</h3>
           <p>A CNN and YOLOv8 model classify damage type and location in seconds.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">
+            <svg viewBox="0 0 24 24" width="26" height="26"><rect x="3" y="6" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6.5 8v8M9 8v8M11.5 8v5.5M14.5 8v8M17 8v5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </span>
+          <h3>DOT code scanner</h3>
+          <p>Scan the sidewall's DOT code to pull tire size, manufacturer, and manufacture date.</p>
         </div>
 
         <div class="feature-card">
@@ -355,27 +348,27 @@
         <div class="dev-card">
           <span class="dev-avatar">JA</span>
           <h3>Julia Allary Velasco Aquino</h3>
-          <p>AI Trainer &amp; Developer</p>
+          <span class="dev-role">AI Trainer &amp; Developer</span>
         </div>
         <div class="dev-card">
           <span class="dev-avatar">KC</span>
           <h3>Karylle Guevarra Cabrido</h3>
-          <p>Programmer &amp; Developer</p>
+          <span class="dev-role">Programmer &amp; Developer</span>
         </div>
         <div class="dev-card">
           <span class="dev-avatar">AS</span>
           <h3>Anne Ritchel De Guzman Sumague</h3>
-          <p>Project Lead, Programmer &amp; Developer</p>
+          <span class="dev-role">Project Lead, Programmer &amp; Developer</span>
         </div>
         <div class="dev-card">
           <span class="dev-avatar">AT</span>
           <h3>Akhicia Mae Calangi Torreliza</h3>
-          <p>Client Liaison, Programmer &amp; UI Developer</p>
+          <span class="dev-role">Client Liaison, Programmer &amp; UI Developer</span>
         </div>
         <div class="dev-card">
           <span class="dev-avatar">RV</span>
           <h3>Rochelle Mae Dela Cruz Velasco</h3>
-          <p>Programmer &amp; Developer</p>
+          <span class="dev-role">Programmer &amp; Developer</span>
         </div>
       </div>
     </div>
@@ -422,7 +415,7 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div class="footer-brand">
-      <span class="logo">InTIRE</span>
+      <span class="brand-logo-wrap footer-logo-wrap"><img src="logo.png" alt="InTIRE" class="brand-logo" /></span>
       <p>AI tire defect inspection, built by BSIT students at PUP Sto. Tomas Campus.</p>
     </div>
     <nav class="footer-nav" aria-label="Footer">

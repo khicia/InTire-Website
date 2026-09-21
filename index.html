@@ -1,437 +1,510 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>InTIRE — AI Tire Defect Inspection</title>
-<meta name="description" content="InTIRE uses AI-powered image detection to spot tire cracks, bulges, punctures and worn treads before they become a problem." />
-<link rel="icon" href="logo.png" type="image/png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InTIRE — AI Tire Defect Inspection</title>
+  <meta name="description"
+    content="InTIRE uses AI-powered image detection to spot tire cracks, bulges, punctures and worn treads before they become a problem." />
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
 
-<a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-<header class="site-header" id="siteHeader">
-  <div class="wrap header-inner">
-    <a href="#top" class="brand" aria-label="InTIRE home">
-      <span class="brand-logo-wrap"><img src="InTire-Logo.png" alt="InTIRE" class="brand-logo" /></span>
-      <span class="brand-tagline">AI Tire Defect Inspection</span>
-    </a>
+  <header class="site-header" id="siteHeader">
+    <div class="wrap header-inner">
+      <a href="#top" class="brand" aria-label="InTIRE home">
+        <span class="brand-logo-wrap"><img src="InTire-Logo.png" alt="InTIRE" class="brand-logo" /></span>
+        <span class="brand-tagline">AI Tire Defect Inspection</span>
+      </a>
 
-    <nav class="main-nav" id="mainNav" aria-label="Primary">
-      <a href="#top">Home</a>
-      <a href="#about">About</a>
-      <a href="#features">Features</a>
-      <a href="#developers">Developers</a>
-    </nav>
+      <nav class="main-nav" id="mainNav" aria-label="Primary">
+        <a href="#top">Home</a>
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#developers">Developers</a>
+      </nav>
 
-    <div class="header-actions">
-      <button class="theme-switch" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Switch to dark mode">
-        <span class="switch-track">
-          <span class="switch-thumb">
-            <svg class="icon-sun" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-              <circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="2"/>
-              <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="12" y1="1.6" x2="12" y2="4.4"/>
-                <line x1="12" y1="19.6" x2="12" y2="22.4"/>
-                <line x1="1.6" y1="12" x2="4.4" y2="12"/>
-                <line x1="19.6" y1="12" x2="22.4" y2="12"/>
-                <line x1="4.4" y1="4.4" x2="6.4" y2="6.4"/>
-                <line x1="17.6" y1="17.6" x2="19.6" y2="19.6"/>
-                <line x1="4.4" y1="19.6" x2="6.4" y2="17.6"/>
-                <line x1="17.6" y1="6.4" x2="19.6" y2="4.4"/>
-              </g>
-            </svg>
-            <svg class="icon-moon" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
-              <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" fill="currentColor"/>
-            </svg>
+      <div class="header-actions">
+        <button class="theme-switch" id="themeToggle" type="button" role="switch" aria-checked="false"
+          aria-label="Switch to dark mode">
+          <span class="switch-track">
+            <span class="switch-thumb">
+              <svg class="icon-sun" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="2" />
+                <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <line x1="12" y1="1.6" x2="12" y2="4.4" />
+                  <line x1="12" y1="19.6" x2="12" y2="22.4" />
+                  <line x1="1.6" y1="12" x2="4.4" y2="12" />
+                  <line x1="19.6" y1="12" x2="22.4" y2="12" />
+                  <line x1="4.4" y1="4.4" x2="6.4" y2="6.4" />
+                  <line x1="17.6" y1="17.6" x2="19.6" y2="19.6" />
+                  <line x1="4.4" y1="19.6" x2="6.4" y2="17.6" />
+                  <line x1="17.6" y1="6.4" x2="19.6" y2="4.4" />
+                </g>
+              </svg>
+              <svg class="icon-moon" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
+                <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" fill="currentColor" />
+              </svg>
+            </span>
           </span>
-        </span>
-      </button>
-      <a href="#access" class="btn btn-primary btn-small">Access InTIRE</a>
-      <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<main id="main">
-
-  <!-- HERO -->
-  <section class="hero" id="top">
-    <div class="wrap hero-inner">
-      <div class="hero-copy">
-        <p class="eyebrow">Capstone Project</p>
-        <p class ="eyebrow">Polytechnic University of the Philippines - Sto. Tomas Campus</p>
-        <h1>InTIREly safe<br>in every drive.</h1>
-        <p class="hero-lede">Point your phone at a tire. InTIRE reads the tread, flags the damage, and tells you what to do next — before a worn tire turns into a roadside emergency.</p>
-        <div class="hero-actions">
-          <a href="#access" class="btn btn-primary">Access InTIRE</a>
-          <a href="#about" class="btn btn-ghost">Learn more</a>
-        </div>
-      </div>
-      <div class="hero-visual" aria-hidden="true">
-        <svg viewBox="0 0 420 420" class="tire-art">
-          <circle cx="210" cy="210" r="170" class="tire-ring-outer"/>
-          <circle cx="210" cy="210" r="170" class="tire-ring-outer-b" stroke-dasharray="4 10"/>
-          <circle cx="210" cy="210" r="118" class="tire-ring-mid"/>
-          <circle cx="210" cy="210" r="46" class="tire-hub"/>
-          <g class="tire-spokes">
-            <line x1="210" y1="92" x2="210" y2="164"/>
-            <line x1="210" y1="256" x2="210" y2="328"/>
-            <line x1="92" y1="210" x2="164" y2="210"/>
-            <line x1="256" y1="210" x2="328" y2="210"/>
-            <line x1="133" y1="133" x2="180" y2="180"/>
-            <line x1="240" y1="240" x2="287" y2="287"/>
-            <line x1="287" y1="133" x2="240" y2="180"/>
-            <line x1="180" y1="240" x2="133" y2="287"/>
-          </g>
-          <g class="tire-marks">
-            <path class="crack-mark" d="M256 128 L266 140 L258 150 L270 162"/>
-            <circle class="scan-dot" cx="256" cy="128" r="5"/>
-          </g>
-        </svg>
+        </button>
+        <a href="#access" class="btn btn-primary btn-small">Access InTIRE</a>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
-    <div class="tread-divider" aria-hidden="true"></div>
-  </section>
+  </header>
 
-  <!-- ABOUT -->
-  <section class="section" id="about">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>What is InTIRE?</h2>
-      </div>
-      <div class="about-grid">
-        <div class="about-card">
-          <h3>Background</h3>
-          <p>Worn treads and hairline sidewall damage are hard to catch by eye, and most drivers only think about their tires after something goes wrong. Blowouts and skidding tied to poor tire condition remain a preventable cause of road accidents.</p>
-        </div>
-        <div class="about-card">
-          <h3>The problem</h3>
-          <p>Manual tire inspection takes trained eyes and time most drivers don't have. Vulcanizing shops are often visited only after a puncture — not before one.</p>
-        </div>
-        <div class="about-card">
-          <h3>Our purpose</h3>
-          <p>InTIRE puts that inspection in your pocket. A phone camera and a deep learning model trained on real tire damage do the looking, so drivers get an early, honest read on tire health.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <main id="main">
 
-  <!-- FEATURES -->
-  <section class="section section-alt" id="features">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>InTIRE features</h2>
-        <p class="section-sub">Everything you need to keep an eye on tire condition, in one app.</p>
-      </div>
-      <div class="feature-grid">
-
-        <div class="feature-card">
-          <span class="feature-icon">
-            <svg viewBox="0 0 24 24" width="26" height="26"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="13.5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
-          </span>
-          <h3>Scanner</h3>
-          <p>Guided camera capture lines up each tire for a clean, consistent scan.</p>
-        </div>
-
-        <div class="feature-card">
-          <span class="feature-icon">
-            <svg viewBox="0 0 24 24" width="26" height="26"><rect x="7" y="7" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.5 5.5 8 8M16 16l2.5 2.5M18.5 5.5 16 8M8 16l-2.5 2.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-          </span>
-          <h3>AI detection</h3>
-          <p>A CNN and YOLOv8 model classify damage type and location in seconds.</p>
-        </div>
-
-        <div class="feature-card">
-          <span class="feature-icon">
-            <svg viewBox="0 0 24 24" width="26" height="26"><rect x="3" y="6" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6.5 8v8M9 8v8M11.5 8v5.5M14.5 8v8M17 8v5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-          </span>
-          <h3>DOT code scanner</h3>
-          <p>Scan the sidewall's DOT code to pull tire size, manufacturer, and manufacture date.</p>
-        </div>
-
-        <div class="feature-card">
-          <span class="feature-icon">
-            <svg viewBox="0 0 24 24" width="26" height="26"><path d="M3 20V10M9 20V4M15 20v-7M21 20V8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-          </span>
-          <h3>Health report</h3>
-          <p>Every scan becomes a plain-language health score with a clear next step.</p>
-        </div>
-
-        <div class="feature-card">
-          <span class="feature-icon">
-            <svg viewBox="0 0 24 24" width="26" height="26"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <h3>Scan history</h3>
-          <p>Track how each tire changes over time and revisit past results anytime.</p>
-        </div>
-
-        <div class="feature-card">
-          <span class="feature-icon">
-            <svg viewBox="0 0 24 24" width="26" height="26"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
-          </span>
-          <h3>Nearby shops</h3>
-          <p>Find nearby vulcanizing shops and service centers when a fix can't wait.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- DETECT -->
-  <section class="section" id="detect">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>What can InTIRE detect?</h2>
-      </div>
-      <div class="detect-grid">
-        <div class="detect-card">
-          <span class="detect-mark" aria-hidden="true">
-            <svg viewBox="0 0 40 40" width="30" height="30"><path d="M9 8 20 20 14 26 24 32" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <h3>Cracks</h3>
-          <p>Surface and sidewall cracking from age or dry rot.</p>
-        </div>
-        <div class="detect-card">
-          <span class="detect-mark" aria-hidden="true">
-            <svg viewBox="0 0 40 40" width="30" height="30"><path d="M6 26c4-14 24-14 28 0" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M15 24c2-6 8-6 10 0" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>
-          </span>
-          <h3>Bulges</h3>
-          <p>Weak spots where internal layers have separated.</p>
-        </div>
-        <div class="detect-card">
-          <span class="detect-mark" aria-hidden="true">
-            <svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="2.4"/><line x1="20" y1="8" x2="20" y2="32" stroke="currentColor" stroke-width="2.4"/></svg>
-          </span>
-          <h3>Punctures</h3>
-          <p>Foreign objects and holes that lead to slow leaks or blowouts.</p>
-        </div>
-        <div class="detect-card">
-          <span class="detect-mark" aria-hidden="true">
-            <svg viewBox="0 0 40 40" width="30" height="30"><rect x="7" y="14" width="26" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><line x1="11" y1="14" x2="11" y2="26" stroke="currentColor" stroke-width="1.6"/><line x1="17" y1="14" x2="17" y2="26" stroke="currentColor" stroke-width="1.6"/><line x1="23" y1="14" x2="23" y2="26" stroke="currentColor" stroke-width="1.6"/><line x1="29" y1="14" x2="29" y2="26" stroke="currentColor" stroke-width="1.6"/></svg>
-          </span>
-          <h3>Worn treads</h3>
-          <p>Tread depth below the safe threshold for road grip.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="section section-alt" id="how">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>How it works</h2>
-      </div>
-      <ol class="steps">
-        <li class="step">
-          <span class="step-num">1</span>
-          <h3>Scan</h3>
-          <p>Open the app and capture each tire with your camera.</p>
-        </li>
-        <li class="step">
-          <span class="step-num">2</span>
-          <h3>Analyze</h3>
-          <p>The image runs through InTIRE's trained detection model.</p>
-        </li>
-        <li class="step">
-          <span class="step-num">3</span>
-          <h3>Detect</h3>
-          <p>Cracks, bulges, punctures, or worn treads are flagged and located.</p>
-        </li>
-        <li class="step">
-          <span class="step-num">4</span>
-          <h3>Results</h3>
-          <p>Get a health score and a plain-language recommendation.</p>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- TECHNOLOGY -->
-  <section class="section" id="technology">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>Technology behind InTIRE</h2>
-        <p class="section-sub">Built on deep learning models trained specifically for tire damage.</p>
-      </div>
-      <div class="tech-badges">
-        <span class="tech-badge">YOLOv8</span>
-        <span class="tech-badge">CNN</span>
-        <span class="tech-badge">Mobile app</span>
-        <span class="tech-badge">Applied AI</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- SCREENSHOTS -->
-  <section class="section section-alt" id="screenshots">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>See InTIRE in action</h2>
-      </div>
-      <div class="phone-row">
-        <div class="phone-frame">
-          <div class="phone-screen screen-scan">
-            <div class="mock-topbar"></div>
-            <div class="mock-viewfinder"><div class="mock-corner tl"></div><div class="mock-corner tr"></div><div class="mock-corner bl"></div><div class="mock-corner br"></div></div>
-            <div class="mock-caption">Position tire in frame</div>
+    <section class="hero" id="top">
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Capstone Project</p>
+          <p class="eyebrow">Polytechnic University of the Philippines - Sto. Tomas Campus</p>
+          <h1>InTIREly safe<br>in every drive.</h1>
+          <p class="hero-lede">Point your phone at a tire. InTIRE reads the tread, flags the damage, and tells you what
+            to do next — before a worn tire turns into a roadside emergency.</p>
+          <div class="hero-actions">
+            <a href="#access" class="btn btn-primary">Access InTIRE</a>
+            <a href="#about" class="btn btn-ghost">Learn more</a>
           </div>
         </div>
-        <div class="phone-frame">
-          <div class="phone-screen screen-result">
-            <div class="mock-topbar"></div>
-            <div class="mock-score">82<span>%</span></div>
-            <div class="mock-label">Tread health</div>
-            <div class="mock-bar"></div>
-            <div class="mock-bar short"></div>
-          </div>
-        </div>
-        <div class="phone-frame">
-          <div class="phone-screen screen-history">
-            <div class="mock-topbar"></div>
-            <div class="mock-row"></div>
-            <div class="mock-row"></div>
-            <div class="mock-row"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ACCESS -->
-  <section class="section" id="access">
-    <div class="wrap access-inner">
-      <div class="section-head">
-        <h2>Access InTIRE</h2>
-        <p class="section-sub">Try the web demo or download the mobile app.</p>
-      </div>
-      <div class="access-actions">
-        <a href="#" class="btn btn-primary">Open app</a>
-        <a href="#" class="btn btn-outline">Download</a>
-      </div>
-      <div class="qr-block">
-        <div class="qr-code" aria-hidden="true">
-          <svg viewBox="0 0 100 100" width="96" height="96">
-            <rect width="100" height="100" fill="none"/>
-            <g fill="currentColor">
-              <rect x="6" y="6" width="24" height="24"/><rect x="12" y="12" width="12" height="12" fill="var(--bg)"/>
-              <rect x="70" y="6" width="24" height="24"/><rect x="76" y="12" width="12" height="12" fill="var(--bg)"/>
-              <rect x="6" y="70" width="24" height="24"/><rect x="12" y="76" width="12" height="12" fill="var(--bg)"/>
-              <rect x="40" y="6" width="6" height="6"/><rect x="52" y="6" width="6" height="6"/><rect x="40" y="18" width="6" height="6"/>
-              <rect x="60" y="40" width="6" height="6"/><rect x="72" y="40" width="6" height="6"/><rect x="84" y="46" width="6" height="6"/>
-              <rect x="40" y="40" width="6" height="6"/><rect x="40" y="52" width="6" height="6"/><rect x="52" y="52" width="6" height="6"/>
-              <rect x="40" y="70" width="6" height="6"/><rect x="52" y="82" width="6" height="6"/><rect x="64" y="70" width="6" height="6"/>
-              <rect x="76" y="76" width="18" height="18"/><rect x="60" y="84" width="6" height="6"/><rect x="40" y="84" width="6" height="6"/>
+        <div class="hero-visual" aria-hidden="true">
+          <svg viewBox="0 0 420 420" class="tire-art">
+            <circle cx="210" cy="210" r="170" class="tire-ring-outer" />
+            <circle cx="210" cy="210" r="170" class="tire-ring-outer-b" stroke-dasharray="4 10" />
+            <circle cx="210" cy="210" r="118" class="tire-ring-mid" />
+            <circle cx="210" cy="210" r="46" class="tire-hub" />
+            <g class="tire-spokes">
+              <line x1="210" y1="92" x2="210" y2="164" />
+              <line x1="210" y1="256" x2="210" y2="328" />
+              <line x1="92" y1="210" x2="164" y2="210" />
+              <line x1="256" y1="210" x2="328" y2="210" />
+              <line x1="133" y1="133" x2="180" y2="180" />
+              <line x1="240" y1="240" x2="287" y2="287" />
+              <line x1="287" y1="133" x2="240" y2="180" />
+              <line x1="180" y1="240" x2="133" y2="287" />
+            </g>
+            <g class="tire-marks">
+              <path class="crack-mark" d="M256 128 L266 140 L258 150 L270 162" />
+              <circle class="scan-dot" cx="256" cy="128" r="5" />
             </g>
           </svg>
         </div>
-        <p class="qr-label">Scan to open InTIRE on your phone</p>
       </div>
-    </div>
-  </section>
+      <div class="tread-divider" aria-hidden="true"></div>
+    </section>
 
-  <!-- DEVELOPERS -->
-  <section class="section section-alt" id="developers">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>Meet the developers</h2>
-        <p class="section-sub">The BSIT thesis team behind InTIRE.</p>
-      </div>
-      <div class="dev-grid">
-        <div class="dev-card">
-          <span class="dev-avatar">JA</span>
-          <h3>Julia Allary Velasco Aquino</h3>
-          <span class="dev-role">AI Trainer &amp; Developer</span>
+    <section class="section" id="about">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What is InTIRE?</h2>
         </div>
-        <div class="dev-card">
-          <span class="dev-avatar">KC</span>
-          <h3>Karylle Guevarra Cabrido</h3>
-          <span class="dev-role">Programmer &amp; Developer</span>
-        </div>
-        <div class="dev-card">
-          <span class="dev-avatar">AS</span>
-          <h3>Anne Ritchel De Guzman Sumague</h3>
-          <span class="dev-role">Project Lead, Programmer &amp; Developer</span>
-        </div>
-        <div class="dev-card">
-          <span class="dev-avatar">AT</span>
-          <h3>Akhicia Mae Calangi Torreliza</h3>
-          <span class="dev-role">Client Liaison, Programmer &amp; UI Developer</span>
-        </div>
-        <div class="dev-card">
-          <span class="dev-avatar">RV</span>
-          <h3>Rochelle Mae Dela Cruz Velasco</h3>
-          <span class="dev-role">Programmer &amp; Developer</span>
+        <div class="about-grid">
+          <div class="about-card">
+            <h3>Background</h3>
+            <p>Worn treads and hairline sidewall damage are hard to catch by eye, and most drivers only think about
+              their tires after something goes wrong. Blowouts and skidding tied to poor tire condition remain a
+              preventable cause of road accidents.</p>
+          </div>
+          <div class="about-card">
+            <h3>The problem</h3>
+            <p>Manual tire inspection takes trained eyes and time most drivers don't have. Vulcanizing shops are often
+              visited only after a puncture — not before one.</p>
+          </div>
+          <div class="about-card">
+            <h3>Our purpose</h3>
+            <p>InTIRE puts that inspection in your pocket. A phone camera and a deep learning model trained on real tire
+              damage do the looking, so drivers get an early, honest read on tire health.</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- THESIS -->
-  <section class="section thesis-section" id="thesis">
-    <div class="wrap thesis-inner">
-      <h2>Thesis project</h2>
-      <p>InTIRE: A Mobile Application for Tire Defect Inspection Using Deep Learning and CNN-Powered Image Detection.</p>
-      <p class="thesis-meta">PUP Sto. Tomas Campus · BSIT · in consultation with the Land Transportation Office</p>
-    </div>
-  </section>
+    <section class="section section-alt" id="features">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>InTIRE features</h2>
+          <p class="section-sub">Everything you need to keep an eye on tire condition, in one app.</p>
+        </div>
+        <div class="feature-grid">
 
-  <!-- SAFETY NOTICE -->
-  <section class="notice-band">
-    <div class="wrap notice-inner">
-      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><line x1="12" y1="9.5" x2="12" y2="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
-      <p>InTIRE supports early awareness of tire damage. It is not a replacement for a certified mechanic — always confirm serious damage in person.</p>
-    </div>
-  </section>
+          <div class="feature-card">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26">
+                <path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"
+                  fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+                <circle cx="12" cy="13.5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7" />
+              </svg>
+            </span>
+            <h3>Scanner</h3>
+            <p>Guided camera capture lines up each tire for a clean, consistent scan.</p>
+          </div>
 
-  <!-- CONTACT -->
-  <section class="section" id="contact">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>Contact</h2>
+          <div class="feature-card">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26">
+                <rect x="7" y="7" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.7" />
+                <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.5 5.5 8 8M16 16l2.5 2.5M18.5 5.5 16 8M8 16l-2.5 2.5"
+                  stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+              </svg>
+            </span>
+            <h3>AI detection</h3>
+            <p>A CNN and YOLOv8 model classify damage type and location in seconds.</p>
+          </div>
+
+          <div class="feature-card">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26">
+                <rect x="3" y="6" width="18" height="12" rx="1.5" fill="none" stroke="currentColor"
+                  stroke-width="1.7" />
+                <path d="M6.5 8v8M9 8v8M11.5 8v5.5M14.5 8v8M17 8v5.5" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" />
+              </svg>
+            </span>
+            <h3>DOT code scanner</h3>
+            <p>Scan the sidewall's DOT code to pull tire size, manufacturer, and manufacture date.</p>
+          </div>
+
+          <div class="feature-card">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26">
+                <path d="M3 20V10M9 20V4M15 20v-7M21 20V8" stroke="currentColor" stroke-width="1.9"
+                  stroke-linecap="round" />
+              </svg>
+            </span>
+            <h3>Health report</h3>
+            <p>Every scan becomes a plain-language health score with a clear next step.</p>
+          </div>
+
+          <div class="feature-card">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7" />
+                <path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </span>
+            <h3>Scan history</h3>
+            <p>Track how each tire changes over time and revisit past results anytime.</p>
+          </div>
+
+          <div class="feature-card">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26">
+                <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21Z" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linejoin="round" />
+                <circle cx="12" cy="9.5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7" />
+              </svg>
+            </span>
+            <h3>Nearby shops</h3>
+            <p>Find nearby vulcanizing shops and service centers when a fix can't wait.</p>
+          </div>
+
+        </div>
       </div>
-      <div class="contact-links">
-        <a href="#" class="contact-link">
-          <svg viewBox="0 0 24 24" width="20" height="20"><path d="M14 9V7a2 2 0 0 1 2-2h2V2h-2a5 5 0 0 0-5 5v2H8v3h3v9h3v-9h3l1-3h-4Z" fill="currentColor"/></svg>
-          Facebook
-        </a>
-        <a href="mailto:intire.thesis@gmail.com" class="contact-link">
-          <svg viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Email
-        </a>
+    </section>
+
+    <section class="section" id="detect">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What can InTIRE detect?</h2>
+        </div>
+        <div class="detect-grid">
+          <div class="detect-card">
+            <span class="detect-mark" aria-hidden="true">
+              <svg viewBox="0 0 40 40" width="30" height="30">
+                <path d="M9 8 20 20 14 26 24 32" stroke="currentColor" stroke-width="2.4" fill="none"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <h3>Cracks</h3>
+            <p>Surface and sidewall cracking from age or dry rot.</p>
+          </div>
+          <div class="detect-card">
+            <span class="detect-mark" aria-hidden="true">
+              <svg viewBox="0 0 40 40" width="30" height="30">
+                <path d="M6 26c4-14 24-14 28 0" stroke="currentColor" stroke-width="2.4" fill="none"
+                  stroke-linecap="round" />
+                <path d="M15 24c2-6 8-6 10 0" stroke="currentColor" stroke-width="2.4" fill="none"
+                  stroke-linecap="round" />
+              </svg>
+            </span>
+            <h3>Bulges</h3>
+            <p>Weak spots where internal layers have separated.</p>
+          </div>
+          <div class="detect-card">
+            <span class="detect-mark" aria-hidden="true">
+              <svg viewBox="0 0 40 40" width="30" height="30">
+                <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="2.4" />
+                <line x1="20" y1="8" x2="20" y2="32" stroke="currentColor" stroke-width="2.4" />
+              </svg>
+            </span>
+            <h3>Punctures</h3>
+            <p>Foreign objects and holes that lead to slow leaks or blowouts.</p>
+          </div>
+          <div class="detect-card">
+            <span class="detect-mark" aria-hidden="true">
+              <svg viewBox="0 0 40 40" width="30" height="30">
+                <rect x="7" y="14" width="26" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.4" />
+                <line x1="11" y1="14" x2="11" y2="26" stroke="currentColor" stroke-width="1.6" />
+                <line x1="17" y1="14" x2="17" y2="26" stroke="currentColor" stroke-width="1.6" />
+                <line x1="23" y1="14" x2="23" y2="26" stroke="currentColor" stroke-width="1.6" />
+                <line x1="29" y1="14" x2="29" y2="26" stroke="currentColor" stroke-width="1.6" />
+              </svg>
+            </span>
+            <h3>Worn treads</h3>
+            <p>Tread depth below the safe threshold for road grip.</p>
+          </div>
+        </div>
       </div>
+    </section>
+
+    <section class="section section-alt" id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>How it works</h2>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num">1</span>
+            <h3>Scan</h3>
+            <p>Open the app and capture each tire with your camera.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">2</span>
+            <h3>Analyze</h3>
+            <p>The image runs through InTIRE's trained detection model.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">3</span>
+            <h3>Detect</h3>
+            <p>Cracks, bulges, punctures, or worn treads are flagged and located.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">4</span>
+            <h3>Results</h3>
+            <p>Get a health score and a plain-language recommendation.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="technology">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Technology behind InTIRE</h2>
+          <p class="section-sub">Built on deep learning models trained specifically for tire damage.</p>
+        </div>
+        <div class="tech-badges">
+          <span class="tech-badge">YOLOv8</span>
+          <span class="tech-badge">CNN</span>
+          <span class="tech-badge">Mobile app</span>
+          <span class="tech-badge">Applied AI</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="screenshots">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>See InTIRE in action</h2>
+        </div>
+        <div class="phone-row">
+          <div class="phone-frame">
+            <div class="phone-screen screen-scan">
+              <div class="mock-topbar"></div>
+              <div class="mock-viewfinder">
+                <div class="mock-corner tl"></div>
+                <div class="mock-corner tr"></div>
+                <div class="mock-corner bl"></div>
+                <div class="mock-corner br"></div>
+              </div>
+              <div class="mock-caption">Position tire in frame</div>
+            </div>
+          </div>
+          <div class="phone-frame">
+            <div class="phone-screen screen-result">
+              <div class="mock-topbar"></div>
+              <div class="mock-score">82<span>%</span></div>
+              <div class="mock-label">Tread health</div>
+              <div class="mock-bar"></div>
+              <div class="mock-bar short"></div>
+            </div>
+          </div>
+          <div class="phone-frame">
+            <div class="phone-screen screen-history">
+              <div class="mock-topbar"></div>
+              <div class="mock-row"></div>
+              <div class="mock-row"></div>
+              <div class="mock-row"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="access">
+      <div class="wrap access-inner">
+        <div class="section-head">
+          <h2>Access InTIRE</h2>
+          <p class="section-sub">Try the web demo or download the mobile app.</p>
+        </div>
+        <div class="access-actions">
+          <a href="https://Intire-Application-docker.onrender.com" class="btn btn-primary">Open</a>
+          <a href="https://github.com/itschellay/InTIRE_App/releases/download/v1.0/InTIRE-App.apk"
+            class="btn btn-outline">Download</a>
+        </div>
+        <div class="qr-block">
+          <div class="qr-code" aria-hidden="true">
+            <svg viewBox="0 0 100 100" width="96" height="96">
+              <rect width="100" height="100" fill="none" />
+              <g fill="currentColor">
+                <rect x="6" y="6" width="24" height="24" />
+                <rect x="12" y="12" width="12" height="12" fill="var(--bg)" />
+                <rect x="70" y="6" width="24" height="24" />
+                <rect x="76" y="12" width="12" height="12" fill="var(--bg)" />
+                <rect x="6" y="70" width="24" height="24" />
+                <rect x="12" y="76" width="12" height="12" fill="var(--bg)" />
+                <rect x="40" y="6" width="6" height="6" />
+                <rect x="52" y="6" width="6" height="6" />
+                <rect x="40" y="18" width="6" height="6" />
+                <rect x="60" y="40" width="6" height="6" />
+                <rect x="72" y="40" width="6" height="6" />
+                <rect x="84" y="46" width="6" height="6" />
+                <rect x="40" y="40" width="6" height="6" />
+                <rect x="40" y="52" width="6" height="6" />
+                <rect x="52" y="52" width="6" height="6" />
+                <rect x="40" y="70" width="6" height="6" />
+                <rect x="52" y="82" width="6" height="6" />
+                <rect x="64" y="70" width="6" height="6" />
+                <rect x="76" y="76" width="18" height="18" />
+                <rect x="60" y="84" width="6" height="6" />
+                <rect x="40" y="84" width="6" height="6" />
+              </g>
+            </svg>
+          </div>
+          <p class="qr-label">Scan to open InTIRE on your phone</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="developers">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Meet the developers</h2>
+          <p class="section-sub">The BSIT thesis team behind InTIRE.</p>
+        </div>
+        <div class="dev-grid">
+          <div class="dev-card">
+            <span class="dev-avatar">JA</span>
+            <h3>Julia Allary Velasco Aquino</h3>
+            <span class="dev-role">AI Trainer &amp; Developer</span>
+          </div>
+          <div class="dev-card">
+            <span class="dev-avatar">KC</span>
+            <h3>Karylle Guevarra Cabrido</h3>
+            <span class="dev-role">Programmer &amp; Developer</span>
+          </div>
+          <div class="dev-card">
+            <span class="dev-avatar">AS</span>
+            <h3>Anne Ritchel De Guzman Sumague</h3>
+            <span class="dev-role">Project Lead, Programmer &amp; Developer</span>
+          </div>
+          <div class="dev-card">
+            <span class="dev-avatar">AT</span>
+            <h3>Akhicia Mae Calangi Torreliza</h3>
+            <span class="dev-role">Client Liaison, Programmer &amp; UI Developer</span>
+          </div>
+          <div class="dev-card">
+            <span class="dev-avatar">RV</span>
+            <h3>Rochelle Mae Dela Cruz Velasco</h3>
+            <span class="dev-role">Programmer &amp; Developer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section thesis-section" id="thesis">
+      <div class="wrap thesis-inner">
+        <h2>Thesis project</h2>
+        <p>InTIRE: A Mobile Application for Tire Defect Inspection Using Deep Learning and CNN-Powered Image Detection.
+        </p>
+        <p class="thesis-meta">PUP Sto. Tomas Campus · BSIT · in consultation with the Land Transportation Office</p>
+      </div>
+    </section>
+
+    <section class="notice-band">
+      <div class="wrap notice-inner">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M12 3 2 20h20L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+          <line x1="12" y1="9.5" x2="12" y2="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          <circle cx="12" cy="17" r="1" fill="currentColor" />
+        </svg>
+        <p>InTIRE supports early awareness of tire damage. It is not a replacement for a certified mechanic — always
+          confirm serious damage in person.</p>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Contact</h2>
+        </div>
+        <div class="contact-links">
+          <a href="#" class="contact-link">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <path d="M14 9V7a2 2 0 0 1 2-2h2V2h-2a5 5 0 0 0-5 5v2H8v3h3v9h3v-9h3l1-3h-4Z" fill="currentColor" />
+            </svg>
+            Facebook
+          </a>
+          <a href="mailto:intire.thesis@gmail.com" class="contact-link">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            Email
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <span class="brand-logo-wrap footer-logo-wrap"><img src="InTire-Logo.png" alt="InTIRE"
+            class="brand-logo" /></span>
+        <p>AI tire defect inspection, built by BSIT students at PUP Sto. Tomas Campus.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#top">Home</a>
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#developers">Developers</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
-  </section>
-
-</main>
-
-<footer class="site-footer">
-  <div class="wrap footer-inner">
-    <div class="footer-brand">
-      <span class="brand-logo-wrap footer-logo-wrap"><img src="InTire-Logo.png" alt="InTIRE" class="brand-logo" /></span>
-      <p>AI tire defect inspection, built by BSIT students at PUP Sto. Tomas Campus.</p>
+    <div class="wrap footer-bottom">
+      <p>© 2026 InTIRE. Thesis project, PUP Sto. Tomas Campus.</p>
     </div>
-    <nav class="footer-nav" aria-label="Footer">
-      <a href="#top">Home</a>
-      <a href="#about">About</a>
-      <a href="#features">Features</a>
-      <a href="#developers">Developers</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </div>
-  <div class="wrap footer-bottom">
-    <p>© 2026 InTIRE. Thesis project, PUP Sto. Tomas Campus.</p>
-  </div>
-</footer>
+  </footer>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
+
 </html>

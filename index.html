@@ -1,510 +1,1734 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InTIRE — AI Tire Defect Inspection</title>
-  <meta name="description"
-    content="InTIRE uses AI-powered image detection to spot tire cracks, bulges, punctures and worn treads before they become a problem." />
-  <link rel="icon" href="logo.png" type="image/png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f5f0">
+    <title>InTIRE — AI Tire Defect Inspection</title>
+    <meta name="description" content="InTIRE uses AI-powered image detection to help spot visible tire defects.">
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #f6f5f0;
+            --surface: #fff;
+            --surface2: #eeede7;
+            --ink: #171816;
+            --muted: #73756f;
+            --line: rgba(23, 24, 22, .12);
+            --accent: #ff6b22;
+            --yellow: #ffd44d;
+            --shadow: 0 18px 50px rgba(25, 25, 20, .07);
+            --radius: 25px
+        }
+
+        html[data-theme=dark] {
+            color-scheme: dark;
+            --bg: #101110;
+            --surface: #191b19;
+            --surface2: #222521;
+            --ink: #f5f4ee;
+            --muted: #a4a79f;
+            --line: rgba(245, 244, 238, .13);
+            --accent: #ff792e;
+            --yellow: #ffd44d;
+            --shadow: 0 18px 50px rgba(0, 0, 0, .2)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 15px/1.65 Inter, Arial, sans-serif;
+            transition: background .25s, color .25s
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        button {
+            font: inherit
+        }
+
+        .wrap {
+            width: min(1160px, calc(100% - 40px));
+            margin: auto
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: "Space Grotesk", sans-serif;
+            letter-spacing: -.045em;
+            margin-top: 0
+        }
+
+        h1 {
+            font-size: clamp(3.2rem, 7vw, 6.4rem);
+            line-height: .96;
+            margin: 20px 0
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            line-height: 1.06;
+            margin-bottom: 12px
+        }
+
+        h3 {
+            font-size: 1.22rem;
+            line-height: 1.2;
+            margin-bottom: 10px
+        }
+
+        p {
+            color: var(--muted);
+            margin-top: 0
+        }
+
+        .mono,
+        .eyebrow,
+        .tiny {
+            font-family: "DM Mono", monospace;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-size: .7rem
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: color-mix(in srgb, var(--bg) 88%, transparent);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--line)
+        }
+
+        .header-inner {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px
+        }
+
+        .logo-box {
+            width: 42px;
+            height: 42px;
+            background: var(--accent);
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            overflow: hidden
+        }
+
+        .logo-box img {
+            width: 35px;
+            height: 35px;
+            object-fit: contain
+        }
+
+        .logo-fallback {
+            font: 700 1.2rem "Space Grotesk";
+            color: #171816
+        }
+
+        .brand-name {
+            font: 700 1.3rem "Space Grotesk";
+            letter-spacing: -.05em
+        }
+
+        .brand-tag {
+            display: block;
+            font-size: .67rem;
+            color: var(--muted);
+            line-height: 1.2
+        }
+
+        .nav {
+            display: flex;
+            gap: 26px
+        }
+
+        .nav a,
+        .footer-nav a {
+            font-size: .86rem;
+            color: var(--muted)
+        }
+
+        .nav a:hover,
+        .footer-nav a:hover {
+            color: var(--accent)
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .theme-btn {
+            height: 41px;
+            border: 1px solid var(--line);
+            border-radius: 99px;
+            background: var(--surface);
+            color: var(--ink);
+            padding: 0 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: .78rem;
+            font-weight: 600
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            border: 1px solid transparent;
+            border-radius: 99px;
+            padding: 12px 19px;
+            font-size: .87rem;
+            font-weight: 700;
+            transition: transform .2s, background .2s;
+            cursor: pointer
+        }
+
+        .btn:hover {
+            transform: translateY(-2px)
+        }
+
+        .primary {
+            background: var(--accent);
+            color: #171816
+        }
+
+        .primary:hover {
+            background: #ff8548
+        }
+
+        .outline {
+            border-color: var(--line);
+            background: var(--surface);
+            color: var(--ink)
+        }
+
+        .dark-btn {
+            background: #171816;
+            color: white
+        }
+
+        .small-btn {
+            padding: 10px 14px;
+            font-size: .78rem
+        }
+
+        .nav-toggle {
+            display: none;
+            width: 41px;
+            height: 41px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--surface);
+            color: var(--ink)
+        }
+
+        .hero {
+            padding: 24px 0
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr .85fr;
+            gap: 15px
+        }
+
+        .hero-copy {
+            min-height: 470px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 31px;
+            padding: clamp(27px, 5vw, 60px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden
+        }
+
+        .hero-copy:after {
+            content: "";
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            right: -140px;
+            bottom: -140px;
+            box-shadow: 0 0 0 30px color-mix(in srgb, var(--accent) 8%, transparent), 0 0 0 60px color-mix(in srgb, var(--accent) 4%, transparent)
+        }
+
+        .eyebrow {
+            color: var(--accent);
+            margin-bottom: 0
+        }
+
+        .eyebrow:before {
+            content: "";
+            display: inline-block;
+            width: 22px;
+            height: 2px;
+            background: currentColor;
+            vertical-align: middle;
+            margin-right: 9px
+        }
+
+        .lede {
+            font-size: 1.03rem;
+            max-width: 570px
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 30px;
+            font-size: .74rem;
+            color: var(--muted)
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #39bd80;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px #39bd8020
+        }
+
+        .visual {
+            min-height: 470px;
+            border-radius: 31px;
+            background: #171816;
+            color: #f7f6f0;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between
+        }
+
+        .visual:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(#ffffff0b 1px, transparent 1px), linear-gradient(90deg, #ffffff0b 1px, transparent 1px);
+            background-size: 28px 28px;
+            mask-image: linear-gradient(black, transparent 90%)
+        }
+
+        .visual-top,
+        .visual-bottom {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px
+        }
+
+        .chip {
+            border: 1px solid #ffffff35;
+            border-radius: 99px;
+            padding: 7px 10px;
+            font: .64rem "DM Mono", monospace;
+            letter-spacing: .08em
+        }
+
+        .visual-status {
+            font-size: .7rem;
+            color: #c5c7c0
+        }
+
+        .tire-stage {
+            flex: 1;
+            min-height: 275px;
+            display: grid;
+            place-items: center;
+            position: relative;
+            z-index: 1
+        }
+
+        .tire-art {
+            width: min(100%, 340px);
+            filter: drop-shadow(0 22px 30px #0008);
+            animation: float 6s ease-in-out infinite
+        }
+
+        .ring {
+            fill: #252825;
+            stroke: #555a53;
+            stroke-width: 2
+        }
+
+        .ring2 {
+            fill: none;
+            stroke: #ff792e;
+            stroke-width: 2;
+            opacity: .8
+        }
+
+        .rim {
+            fill: #171816;
+            stroke: #656a61;
+            stroke-width: 15
+        }
+
+        .hub {
+            fill: #2b2e29;
+            stroke: #ff792e;
+            stroke-width: 2
+        }
+
+        .spokes {
+            stroke: #777c72;
+            stroke-width: 8;
+            stroke-linecap: round
+        }
+
+        .crack {
+            fill: none;
+            stroke: #ffd44d;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round
+        }
+
+        .scan-line {
+            position: absolute;
+            left: 12%;
+            width: 76%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff792e, transparent);
+            top: 50%;
+            box-shadow: 0 0 18px #ff792e;
+            animation: scan 4s ease-in-out infinite
+        }
+
+        .visual-bottom strong {
+            font: 600 1.45rem "Space Grotesk";
+            display: block
+        }
+
+        .visual-bottom small {
+            display: block;
+            color: #b8bbb2;
+            font-size: .72rem
+        }
+
+        .yellow-chip {
+            background: #ffd44d;
+            color: #171816;
+            border-radius: 11px;
+            padding: 10px;
+            font: .65rem "DM Mono", monospace
+        }
+
+        .section {
+            padding: 68px 0
+        }
+
+        .alt {
+            background: var(--surface2);
+            border-block: 1px solid var(--line)
+        }
+
+        .section-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 25px;
+            margin-bottom: 25px
+        }
+
+        .section-head>p {
+            max-width: 450px;
+            margin-bottom: 3px
+        }
+
+        .index {
+            font: .7rem "DM Mono", monospace;
+            color: var(--accent);
+            margin-bottom: 10px
+        }
+
+        .bento {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 14px
+        }
+
+        .card {
+            min-width: 0;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+            padding: 27px;
+            overflow: hidden
+        }
+
+        .mission {
+            grid-column: span 7;
+            min-height: 270px;
+            background: var(--accent);
+            color: #171816;
+            border: 0
+        }
+
+        .mission p {
+            color: #29231f
+        }
+
+        .mission .eyebrow {
+            color: #171816
+        }
+
+        .big-word {
+            font: 700 clamp(3rem, 6vw, 5.5rem)/.95 "Space Grotesk";
+            letter-spacing: -.08em;
+            margin: 27px 0 0
+        }
+
+        .problem {
+            grid-column: span 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 270px
+        }
+
+        .problem .stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--line);
+            padding-top: 15px;
+            margin-top: 20px
+        }
+
+        .problem .stat strong {
+            font: 700 1.3rem "Space Grotesk"
+        }
+
+        .info-row {
+            grid-column: span 12;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 0
+        }
+
+        .info {
+            padding: 23px 27px
+        }
+
+        .info+.info {
+            border-left: 1px solid var(--line)
+        }
+
+        .info-icon {
+            display: block;
+            color: var(--accent);
+            font-size: 1.35rem;
+            margin-bottom: 12px
+        }
+
+        .info p {
+            font-size: .88rem;
+            margin: 0
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px
+        }
+
+        .feature {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 24px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            transition: transform .2s, border-color .2s
+        }
+
+        .feature:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent)
+        }
+
+        .feature.feature-dark {
+            background: #171816;
+            color: #f7f6f0
+        }
+
+        .feature.feature-dark p {
+            color: #b8bbb2
+        }
+
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 14px;
+            background: color-mix(in srgb, var(--accent) 16%, var(--surface2));
+            color: var(--accent);
+            display: grid;
+            place-items: center;
+            margin-bottom: 25px
+        }
+
+        .feature-dark .feature-icon {
+            background: var(--accent);
+            color: #171816
+        }
+
+        .feature p {
+            font-size: .88rem;
+            margin-bottom: 0
+        }
+
+        .feature-foot {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 18px;
+            font: .64rem "DM Mono", monospace;
+            text-transform: uppercase;
+            color: var(--muted)
+        }
+
+        .feature-dark .feature-foot {
+            color: #b8bbb2
+        }
+
+        .detect-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px
+        }
+
+        .detect {
+            padding: 21px;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: var(--surface);
+            min-height: 180px
+        }
+
+        .detect:nth-child(even) {
+            background: var(--surface2)
+        }
+
+        .detect-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 14px;
+            background: color-mix(in srgb, var(--yellow) 35%, var(--surface));
+            display: grid;
+            place-items: center;
+            margin-bottom: 23px;
+            font-size: 1.3rem
+        }
+
+        .detect p {
+            font-size: .84rem;
+            margin: 0
+        }
+
+        .steps {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px
+        }
+
+        .step {
+            padding: 23px 4px;
+            border-top: 2px solid var(--line);
+            position: relative
+        }
+
+        .step:before {
+            content: "";
+            position: absolute;
+            top: -2px;
+            left: 0;
+            height: 2px;
+            width: 0;
+            background: var(--accent);
+            transition: width .3s
+        }
+
+        .step:hover:before {
+            width: 100%
+        }
+
+        .step-num {
+            display: grid;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #171816;
+            margin-bottom: 23px
+        }
+
+        .step p {
+            font-size: .86rem;
+            margin: 0
+        }
+
+        .tech-panel {
+            background: #171816;
+            color: #f7f6f0;
+            border-radius: 30px;
+            padding: clamp(27px, 5vw, 52px);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .tech-panel p {
+            color: #b8bbb2;
+            max-width: 510px
+        }
+
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            position: relative;
+            z-index: 1
+        }
+
+        .tech-badge {
+            padding: 10px 14px;
+            border: 1px solid #ffffff35;
+            border-radius: 99px;
+            font: .73rem "DM Mono", monospace
+        }
+
+        .tech-badge:first-child {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #171816
+        }
+
+        .phone-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            align-items: center
+        }
+
+        .phone-card {
+            padding: 13px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            border-radius: 25px
+        }
+
+        .phone-card:nth-child(2) {
+            transform: translateY(-12px)
+        }
+
+        .phone-screen {
+            background: #171816;
+            color: #f7f6f0;
+            border-radius: 18px;
+            padding: 17px;
+            min-height: 280px;
+            overflow: hidden
+        }
+
+        .mock-top {
+            height: 6px;
+            width: 43px;
+            background: #666b62;
+            border-radius: 9px;
+            margin: 0 auto 22px
+        }
+
+        .viewfinder {
+            height: 145px;
+            border: 1px solid #ffffff35;
+            border-radius: 16px;
+            background: radial-gradient(circle, #ff792e33, transparent 65%);
+            position: relative
+        }
+
+        .viewfinder:after {
+            content: "";
+            position: absolute;
+            inset: 22px;
+            border: 1px dashed #ff792e;
+            border-radius: 9px
+        }
+
+        .mock-caption {
+            text-align: center;
+            color: #bfc2b9;
+            font: .62rem "DM Mono", monospace;
+            margin-top: 18px
+        }
+
+        .score {
+            font: 700 3.8rem/.95 "Space Grotesk";
+            text-align: center;
+            color: #ffd44d;
+            margin-top: 25px
+        }
+
+        .score span {
+            font-size: 1.3rem
+        }
+
+        .score-label {
+            text-align: center;
+            font-size: .72rem;
+            color: #bfc2b9
+        }
+
+        .bar {
+            height: 8px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #ff792e 82%, #41453e 82%);
+            margin: 24px 4px 11px
+        }
+
+        .bar.short {
+            width: 70%;
+            margin-top: 0;
+            background: linear-gradient(90deg, #ffd44d 60%, #41453e 60%)
+        }
+
+        .history-row {
+            height: 43px;
+            border-radius: 11px;
+            background: #292c27;
+            margin: 12px 0;
+            position: relative
+        }
+
+        .history-row:before {
+            content: "";
+            position: absolute;
+            left: 11px;
+            top: 11px;
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            background: #ff792e
+        }
+
+        .history-row:after {
+            content: "";
+            position: absolute;
+            left: 41px;
+            top: 13px;
+            width: 45%;
+            height: 5px;
+            border-radius: 8px;
+            background: #767a70;
+            box-shadow: 0 10px 0 #484c45
+        }
+
+        .access-panel {
+            background: var(--yellow);
+            color: #171816;
+            border-radius: 30px;
+            padding: clamp(27px, 5vw, 52px);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 24px;
+            align-items: center
+        }
+
+        .access-panel p {
+            color: #514b36;
+            max-width: 570px
+        }
+
+        .access-panel .eyebrow {
+            color: #171816
+        }
+
+        .access-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .access-panel .outline {
+            background: #ffffff55;
+            border-color: #17181635;
+            color: #171816
+        }
+
+        .download-note {
+            font: .67rem "DM Mono", monospace;
+            color: #625b43;
+            margin: 13px 0 0
+        }
+
+        .download-note a {
+            text-decoration: underline
+        }
+
+        .dev-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 12px
+        }
+
+        .dev {
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: 21px;
+            background: var(--surface);
+            min-width: 0
+        }
+
+        .avatar {
+            width: 47px;
+            height: 47px;
+            border-radius: 15px;
+            display: grid;
+            place-items: center;
+            background: var(--surface2);
+            border: 1px solid var(--line);
+            font: 700 1rem "Space Grotesk";
+            color: var(--accent);
+            margin-bottom: 24px
+        }
+
+        .dev h3 {
+            font-size: .98rem;
+            overflow-wrap: anywhere
+        }
+
+        .role {
+            font: .65rem "DM Mono", monospace;
+            color: var(--muted);
+            line-height: 1.6
+        }
+
+        .thesis {
+            display: flex;
+            justify-content: space-between;
+            gap: 25px;
+            align-items: flex-start
+        }
+
+        .thesis p {
+            max-width: 760px;
+            margin-bottom: 0
+        }
+
+        .thesis-label {
+            font: .68rem "DM Mono", monospace;
+            color: var(--accent);
+            white-space: nowrap
+        }
+
+        .notice {
+            padding: 19px 0;
+            background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+            border-block: 1px solid var(--line)
+        }
+
+        .notice-inner {
+            display: flex;
+            gap: 13px;
+            align-items: flex-start
+        }
+
+        .notice-icon {
+            color: var(--accent);
+            font-size: 1.3rem
+        }
+
+        .notice p {
+            font-size: .85rem;
+            margin: 0
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px
+        }
+
+        .contact-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 21px 23px;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            background: var(--surface)
+        }
+
+        .contact-link:hover {
+            border-color: var(--accent)
+        }
+
+        .site-footer {
+            padding: 36px 0 20px;
+            border-top: 1px solid var(--line)
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            gap: 25px
+        }
+
+        .footer-brand {
+            max-width: 340px
+        }
+
+        .footer-brand p {
+            font-size: .82rem;
+            margin-top: 13px
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--line);
+            margin-top: 23px;
+            padding-top: 16px
+        }
+
+        .footer-bottom p {
+            font: .66rem "DM Mono", monospace;
+            margin: 0
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity .5s, transform .5s
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none
+        }
+
+        .skip {
+            position: absolute;
+            left: -999px;
+            top: 10px;
+            z-index: 100;
+            background: var(--accent);
+            padding: 9px;
+            border-radius: 8px;
+            color: #171816
+        }
+
+        .skip:focus {
+            left: 10px
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-3deg)
+            }
+
+            50% {
+                transform: translateY(-9px) rotate(1deg)
+            }
+        }
+
+        @keyframes scan {
+
+            0%,
+            100% {
+                transform: translateY(-85px);
+                opacity: .2
+            }
+
+            50% {
+                transform: translateY(85px);
+                opacity: 1
+            }
+        }
+
+        @media(max-width:960px) {
+            .nav {
+                gap: 15px
+            }
+
+            .dev-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:760px) {
+            .wrap {
+                width: calc(100% - 28px)
+            }
+
+            .header-inner {
+                min-height: 69px
+            }
+
+            .brand-tag {
+                display: none
+            }
+
+            .nav {
+                display: none;
+                position: absolute;
+                top: 69px;
+                left: 14px;
+                right: 14px;
+                background: var(--surface);
+                border: 1px solid var(--line);
+                border-radius: 17px;
+                padding: 10px;
+                box-shadow: var(--shadow);
+                flex-direction: column;
+                gap: 0
+            }
+
+            .nav.open {
+                display: flex
+            }
+
+            .nav a {
+                padding: 12px
+            }
+
+            .actions>.small-btn {
+                display: none
+            }
+
+            .nav-toggle {
+                display: grid;
+                place-content: center;
+                gap: 4px
+            }
+
+            .nav-toggle span {
+                width: 17px;
+                height: 2px;
+                background: var(--ink);
+                display: block;
+                border-radius: 4px
+            }
+
+            .theme-btn {
+                height: 39px;
+                padding: 0 10px
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr
+            }
+
+            .hero-copy {
+                min-height: 0;
+                padding: 31px 24px
+            }
+
+            .visual {
+                min-height: 370px
+            }
+
+            .section {
+                padding: 51px 0
+            }
+
+            .section-head {
+                display: block
+            }
+
+            .section-head>p {
+                margin-top: 12px
+            }
+
+            .mission,
+            .problem,
+            .info-row {
+                grid-column: span 12
+            }
+
+            .info-row {
+                grid-template-columns: 1fr
+            }
+
+            .info {
+                padding: 19px 24px
+            }
+
+            .info+.info {
+                border-left: 0;
+                border-top: 1px solid var(--line)
+            }
+
+            .detect-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .steps {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .tech-panel {
+                grid-template-columns: 1fr
+            }
+
+            .access-panel {
+                grid-template-columns: 1fr
+            }
+
+            .dev-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .thesis {
+                display: block
+            }
+
+            .thesis-label {
+                display: block;
+                margin-top: 17px
+            }
+
+            .footer-inner {
+                display: block
+            }
+
+            .footer-nav {
+                margin-top: 20px
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:430px) {
+            h1 {
+                font-size: 3.1rem
+            }
+
+            .hero-copy {
+                padding: 27px 20px
+            }
+
+            .visual {
+                padding: 19px;
+                min-height: 330px
+            }
+
+            .tire-stage {
+                min-height: 220px
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr
+            }
+
+            .feature {
+                min-height: 185px
+            }
+
+            .detect {
+                padding: 16px;
+                min-height: 175px
+            }
+
+            .steps {
+                grid-template-columns: 1fr
+            }
+
+            .step {
+                padding: 19px 4px
+            }
+
+            .phone-row {
+                grid-template-columns: 1fr;
+                max-width: 290px;
+                margin: auto
+            }
+
+            .phone-card:nth-child(2) {
+                transform: none
+            }
+
+            .phone-screen {
+                min-height: 255px
+            }
+
+            .viewfinder {
+                height: 130px
+            }
+
+            .dev {
+                padding: 14px
+            }
+
+            .access-buttons .btn {
+                width: 100%
+            }
+
+            .section-head h2 {
+                font-size: 2.15rem
+            }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+
+            *,
+            *:before,
+            *:after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important
+            }
+
+            .reveal {
+                opacity: 1;
+                transform: none
+            }
+        }
+    </style>
 </head>
 
 <body>
-
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <header class="site-header" id="siteHeader">
-    <div class="wrap header-inner">
-      <a href="#top" class="brand" aria-label="InTIRE home">
-        <span class="brand-logo-wrap"><img src="InTire-Logo.png" alt="InTIRE" class="brand-logo" /></span>
-        <span class="brand-tagline">AI Tire Defect Inspection</span>
-      </a>
-
-      <nav class="main-nav" id="mainNav" aria-label="Primary">
-        <a href="#top">Home</a>
-        <a href="#about">About</a>
-        <a href="#features">Features</a>
-        <a href="#developers">Developers</a>
-      </nav>
-
-      <div class="header-actions">
-        <button class="theme-switch" id="themeToggle" type="button" role="switch" aria-checked="false"
-          aria-label="Switch to dark mode">
-          <span class="switch-track">
-            <span class="switch-thumb">
-              <svg class="icon-sun" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                <circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="2" />
-                <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                  <line x1="12" y1="1.6" x2="12" y2="4.4" />
-                  <line x1="12" y1="19.6" x2="12" y2="22.4" />
-                  <line x1="1.6" y1="12" x2="4.4" y2="12" />
-                  <line x1="19.6" y1="12" x2="22.4" y2="12" />
-                  <line x1="4.4" y1="4.4" x2="6.4" y2="6.4" />
-                  <line x1="17.6" y1="17.6" x2="19.6" y2="19.6" />
-                  <line x1="4.4" y1="19.6" x2="6.4" y2="17.6" />
-                  <line x1="17.6" y1="6.4" x2="19.6" y2="4.4" />
-                </g>
-              </svg>
-              <svg class="icon-moon" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
-                <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" fill="currentColor" />
-              </svg>
-            </span>
-          </span>
-        </button>
-        <a href="#access" class="btn btn-primary btn-small">Access InTIRE</a>
-        <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main id="main">
-
-    <section class="hero" id="top">
-      <div class="wrap hero-inner">
-        <div class="hero-copy">
-          <p class="eyebrow">Capstone Project</p>
-          <p class="eyebrow">Polytechnic University of the Philippines - Sto. Tomas Campus</p>
-          <h1>InTIREly safe<br>in every drive.</h1>
-          <p class="hero-lede">Point your phone at a tire. InTIRE reads the tread, flags the damage, and tells you what
-            to do next — before a worn tire turns into a roadside emergency.</p>
-          <div class="hero-actions">
-            <a href="#access" class="btn btn-primary">Access InTIRE</a>
-            <a href="#about" class="btn btn-ghost">Learn more</a>
-          </div>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+        <div class="wrap header-inner">
+            <a href="#top" class="brand" aria-label="InTIRE home"><span class="logo-box"><img src="InTire-Logo.png"
+                        alt="" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><span
+                        class="logo-fallback" hidden>iT</span></span><span><span class="brand-name">InTIRE<span
+                            style="color:var(--accent)">.</span></span><span class="brand-tag">AI tire defect
+                        inspection</span></span></a>
+            <nav class="nav" id="mainNav" aria-label="Primary navigation"><a href="#top">Home</a><a
+                    href="#about">About</a><a href="#features">Features</a><a href="#developers">Developers</a></nav>
+            <div class="actions"><button class="theme-btn" id="themeToggle" type="button" aria-pressed="false"
+                    aria-label="Switch to dark mode"><span id="themeIcon" aria-hidden="true">☾</span><span
+                        id="themeLabel">Dark mode</span></button><a href="#access" class="btn primary small-btn">Get the
+                    app ↗</a><button class="nav-toggle" id="navToggle" type="button" aria-label="Open navigation menu"
+                    aria-expanded="false"><span></span><span></span><span></span></button></div>
         </div>
-        <div class="hero-visual" aria-hidden="true">
-          <svg viewBox="0 0 420 420" class="tire-art">
-            <circle cx="210" cy="210" r="170" class="tire-ring-outer" />
-            <circle cx="210" cy="210" r="170" class="tire-ring-outer-b" stroke-dasharray="4 10" />
-            <circle cx="210" cy="210" r="118" class="tire-ring-mid" />
-            <circle cx="210" cy="210" r="46" class="tire-hub" />
-            <g class="tire-spokes">
-              <line x1="210" y1="92" x2="210" y2="164" />
-              <line x1="210" y1="256" x2="210" y2="328" />
-              <line x1="92" y1="210" x2="164" y2="210" />
-              <line x1="256" y1="210" x2="328" y2="210" />
-              <line x1="133" y1="133" x2="180" y2="180" />
-              <line x1="240" y1="240" x2="287" y2="287" />
-              <line x1="287" y1="133" x2="240" y2="180" />
-              <line x1="180" y1="240" x2="133" y2="287" />
-            </g>
-            <g class="tire-marks">
-              <path class="crack-mark" d="M256 128 L266 140 L258 150 L270 162" />
-              <circle class="scan-dot" cx="256" cy="128" r="5" />
-            </g>
-          </svg>
-        </div>
-      </div>
-      <div class="tread-divider" aria-hidden="true"></div>
-    </section>
-
-    <section class="section" id="about">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>What is InTIRE?</h2>
-        </div>
-        <div class="about-grid">
-          <div class="about-card">
-            <h3>Background</h3>
-            <p>Worn treads and hairline sidewall damage are hard to catch by eye, and most drivers only think about
-              their tires after something goes wrong. Blowouts and skidding tied to poor tire condition remain a
-              preventable cause of road accidents.</p>
-          </div>
-          <div class="about-card">
-            <h3>The problem</h3>
-            <p>Manual tire inspection takes trained eyes and time most drivers don't have. Vulcanizing shops are often
-              visited only after a puncture — not before one.</p>
-          </div>
-          <div class="about-card">
-            <h3>Our purpose</h3>
-            <p>InTIRE puts that inspection in your pocket. A phone camera and a deep learning model trained on real tire
-              damage do the looking, so drivers get an early, honest read on tire health.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-alt" id="features">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>InTIRE features</h2>
-          <p class="section-sub">Everything you need to keep an eye on tire condition, in one app.</p>
-        </div>
-        <div class="feature-grid">
-
-          <div class="feature-card">
-            <span class="feature-icon">
-              <svg viewBox="0 0 24 24" width="26" height="26">
-                <path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"
-                  fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
-                <circle cx="12" cy="13.5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7" />
-              </svg>
-            </span>
-            <h3>Scanner</h3>
-            <p>Guided camera capture lines up each tire for a clean, consistent scan.</p>
-          </div>
-
-          <div class="feature-card">
-            <span class="feature-icon">
-              <svg viewBox="0 0 24 24" width="26" height="26">
-                <rect x="7" y="7" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.7" />
-                <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.5 5.5 8 8M16 16l2.5 2.5M18.5 5.5 16 8M8 16l-2.5 2.5"
-                  stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
-              </svg>
-            </span>
-            <h3>AI detection</h3>
-            <p>A CNN and YOLOv8 model classify damage type and location in seconds.</p>
-          </div>
-
-          <div class="feature-card">
-            <span class="feature-icon">
-              <svg viewBox="0 0 24 24" width="26" height="26">
-                <rect x="3" y="6" width="18" height="12" rx="1.5" fill="none" stroke="currentColor"
-                  stroke-width="1.7" />
-                <path d="M6.5 8v8M9 8v8M11.5 8v5.5M14.5 8v8M17 8v5.5" stroke="currentColor" stroke-width="1.7"
-                  stroke-linecap="round" />
-              </svg>
-            </span>
-            <h3>DOT code scanner</h3>
-            <p>Scan the sidewall's DOT code to pull tire size, manufacturer, and manufacture date.</p>
-          </div>
-
-          <div class="feature-card">
-            <span class="feature-icon">
-              <svg viewBox="0 0 24 24" width="26" height="26">
-                <path d="M3 20V10M9 20V4M15 20v-7M21 20V8" stroke="currentColor" stroke-width="1.9"
-                  stroke-linecap="round" />
-              </svg>
-            </span>
-            <h3>Health report</h3>
-            <p>Every scan becomes a plain-language health score with a clear next step.</p>
-          </div>
-
-          <div class="feature-card">
-            <span class="feature-icon">
-              <svg viewBox="0 0 24 24" width="26" height="26">
-                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7" />
-                <path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
-            </span>
-            <h3>Scan history</h3>
-            <p>Track how each tire changes over time and revisit past results anytime.</p>
-          </div>
-
-          <div class="feature-card">
-            <span class="feature-icon">
-              <svg viewBox="0 0 24 24" width="26" height="26">
-                <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21Z" fill="none" stroke="currentColor"
-                  stroke-width="1.7" stroke-linejoin="round" />
-                <circle cx="12" cy="9.5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7" />
-              </svg>
-            </span>
-            <h3>Nearby shops</h3>
-            <p>Find nearby vulcanizing shops and service centers when a fix can't wait.</p>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="detect">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>What can InTIRE detect?</h2>
-        </div>
-        <div class="detect-grid">
-          <div class="detect-card">
-            <span class="detect-mark" aria-hidden="true">
-              <svg viewBox="0 0 40 40" width="30" height="30">
-                <path d="M9 8 20 20 14 26 24 32" stroke="currentColor" stroke-width="2.4" fill="none"
-                  stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
-            <h3>Cracks</h3>
-            <p>Surface and sidewall cracking from age or dry rot.</p>
-          </div>
-          <div class="detect-card">
-            <span class="detect-mark" aria-hidden="true">
-              <svg viewBox="0 0 40 40" width="30" height="30">
-                <path d="M6 26c4-14 24-14 28 0" stroke="currentColor" stroke-width="2.4" fill="none"
-                  stroke-linecap="round" />
-                <path d="M15 24c2-6 8-6 10 0" stroke="currentColor" stroke-width="2.4" fill="none"
-                  stroke-linecap="round" />
-              </svg>
-            </span>
-            <h3>Bulges</h3>
-            <p>Weak spots where internal layers have separated.</p>
-          </div>
-          <div class="detect-card">
-            <span class="detect-mark" aria-hidden="true">
-              <svg viewBox="0 0 40 40" width="30" height="30">
-                <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="2.4" />
-                <line x1="20" y1="8" x2="20" y2="32" stroke="currentColor" stroke-width="2.4" />
-              </svg>
-            </span>
-            <h3>Punctures</h3>
-            <p>Foreign objects and holes that lead to slow leaks or blowouts.</p>
-          </div>
-          <div class="detect-card">
-            <span class="detect-mark" aria-hidden="true">
-              <svg viewBox="0 0 40 40" width="30" height="30">
-                <rect x="7" y="14" width="26" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.4" />
-                <line x1="11" y1="14" x2="11" y2="26" stroke="currentColor" stroke-width="1.6" />
-                <line x1="17" y1="14" x2="17" y2="26" stroke="currentColor" stroke-width="1.6" />
-                <line x1="23" y1="14" x2="23" y2="26" stroke="currentColor" stroke-width="1.6" />
-                <line x1="29" y1="14" x2="29" y2="26" stroke="currentColor" stroke-width="1.6" />
-              </svg>
-            </span>
-            <h3>Worn treads</h3>
-            <p>Tread depth below the safe threshold for road grip.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-alt" id="how">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>How it works</h2>
-        </div>
-        <ol class="steps">
-          <li class="step">
-            <span class="step-num">1</span>
-            <h3>Scan</h3>
-            <p>Open the app and capture each tire with your camera.</p>
-          </li>
-          <li class="step">
-            <span class="step-num">2</span>
-            <h3>Analyze</h3>
-            <p>The image runs through InTIRE's trained detection model.</p>
-          </li>
-          <li class="step">
-            <span class="step-num">3</span>
-            <h3>Detect</h3>
-            <p>Cracks, bulges, punctures, or worn treads are flagged and located.</p>
-          </li>
-          <li class="step">
-            <span class="step-num">4</span>
-            <h3>Results</h3>
-            <p>Get a health score and a plain-language recommendation.</p>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <section class="section" id="technology">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>Technology behind InTIRE</h2>
-          <p class="section-sub">Built on deep learning models trained specifically for tire damage.</p>
-        </div>
-        <div class="tech-badges">
-          <span class="tech-badge">YOLOv8</span>
-          <span class="tech-badge">CNN</span>
-          <span class="tech-badge">Mobile app</span>
-          <span class="tech-badge">Applied AI</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-alt" id="screenshots">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>See InTIRE in action</h2>
-        </div>
-        <div class="phone-row">
-          <div class="phone-frame">
-            <div class="phone-screen screen-scan">
-              <div class="mock-topbar"></div>
-              <div class="mock-viewfinder">
-                <div class="mock-corner tl"></div>
-                <div class="mock-corner tr"></div>
-                <div class="mock-corner bl"></div>
-                <div class="mock-corner br"></div>
-              </div>
-              <div class="mock-caption">Position tire in frame</div>
+    </header>
+    <main id="main">
+        <section class="hero" id="top">
+            <div class="wrap hero-grid">
+                <div class="hero-copy">
+                    <p class="eyebrow">PUP Sto. Tomas · Capstone project</p>
+                    <h1>Safer tires.<br><span style="color:var(--accent)">Smarter</span> drives.</h1>
+                    <p class="lede">Meet InTIRE — a mobile tire inspection companion that uses AI-powered image
+                        detection to help spot visible tire defects before your next drive.</p>
+                    <div class="hero-buttons"><a href="#access" class="btn primary">Access InTIRE ↗</a><a href="#about"
+                            class="btn outline">Explore the project ↓</a></div>
+                    <div class="hero-meta"><span class="dot"></span><span>Built for everyday tire
+                            awareness</span><span>·</span><span>Mobile-first</span></div>
+                </div>
+                <div class="visual" aria-label="Decorative tire scan illustration">
+                    <div class="visual-top"><span class="chip">INTIRE / VISION 01</span><span class="visual-status">●
+                            SCAN SYSTEM</span></div>
+                    <div class="tire-stage"><svg viewBox="0 0 420 420" class="tire-art" role="img"
+                            aria-label="Stylized tire with AI scan marker">
+                            <circle cx="210" cy="210" r="170" class="ring" />
+                            <circle cx="210" cy="210" r="170" class="ring2" stroke-dasharray="4 10" />
+                            <circle cx="210" cy="210" r="118" class="rim" />
+                            <circle cx="210" cy="210" r="46" class="hub" />
+                            <g class="spokes">
+                                <line x1="210" y1="92" x2="210" y2="164" />
+                                <line x1="210" y1="256" x2="210" y2="328" />
+                                <line x1="92" y1="210" x2="164" y2="210" />
+                                <line x1="256" y1="210" x2="328" y2="210" />
+                                <line x1="133" y1="133" x2="180" y2="180" />
+                                <line x1="240" y1="240" x2="287" y2="287" />
+                                <line x1="287" y1="133" x2="240" y2="180" />
+                                <line x1="180" y1="240" x2="133" y2="287" />
+                            </g>
+                            <path class="crack" d="M256 128 L266 140 L258 150 L270 162" />
+                            <circle cx="256" cy="128" r="5" fill="#ffd44d" />
+                        </svg><span class="scan-line"></span></div>
+                    <div class="visual-bottom">
+                        <div><small>IMAGE ANALYSIS</small><strong>Look closer.</strong><small>Know before you
+                                go.</small></div><span class="yellow-chip">AI / ENABLED ↗</span>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="phone-frame">
-            <div class="phone-screen screen-result">
-              <div class="mock-topbar"></div>
-              <div class="mock-score">82<span>%</span></div>
-              <div class="mock-label">Tread health</div>
-              <div class="mock-bar"></div>
-              <div class="mock-bar short"></div>
+        </section>
+        <section class="section" id="about">
+            <div class="wrap">
+                <div class="section-head">
+                    <div>
+                        <p class="index">01 / THE MISSION</p>
+                        <h2>Confidence starts<br>with a closer look.</h2>
+                    </div>
+                    <p>InTIRE brings tire awareness closer to drivers by making visible tire inspection more
+                        approachable and easier to understand.</p>
+                </div>
+                <div class="bento">
+                    <article class="card mission reveal">
+                        <p class="eyebrow">Why InTIRE exists</p>
+                        <h3 style="font-size:clamp(1.7rem,3vw,2.6rem);max-width:560px">A small check today can make a
+                            meaningful difference on the road.</h3>
+                        <p>Damage can be easy to miss during a quick walk-around. InTIRE is designed to help users
+                            notice possible concerns and decide when to seek professional help.</p>
+                        <div class="big-word">LOOK<span style="color:white">.</span> SCAN<span
+                                style="color:white">.</span> GO<span style="color:white">.</span></div>
+                    </article>
+                    <article class="card problem reveal">
+                        <div>
+                            <p class="eyebrow">The challenge</p>
+                            <h3>Not every tire problem is obvious.</h3>
+                            <p>Manual inspection takes time and experience. Drivers may not notice cracks, bulges,
+                                punctures, or tread wear until a problem interrupts a trip.</p>
+                        </div>
+                        <div class="stat"><span class="tiny">DESIGNED AROUND</span><strong>Early awareness ↗</strong>
+                        </div>
+                    </article>
+                    <div class="card info-row reveal">
+                        <div class="info"><span class="info-icon">◎</span>
+                            <h3>Capture</h3>
+                            <p>Use a phone camera to capture a tire image for inspection.</p>
+                        </div>
+                        <div class="info"><span class="info-icon">⌘</span>
+                            <h3>Analyze</h3>
+                            <p>AI-based image detection helps identify visible defect patterns.</p>
+                        </div>
+                        <div class="info"><span class="info-icon">↗</span>
+                            <h3>Take action</h3>
+                            <p>Review results and consider professional inspection when needed.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="phone-frame">
-            <div class="phone-screen screen-history">
-              <div class="mock-topbar"></div>
-              <div class="mock-row"></div>
-              <div class="mock-row"></div>
-              <div class="mock-row"></div>
+        </section>
+        <section class="section alt" id="features">
+            <div class="wrap">
+                <div class="section-head">
+                    <div>
+                        <p class="index">02 / WHAT IT DOES</p>
+                        <h2>Useful by design.</h2>
+                    </div>
+                    <p>Practical tools, clear results, and tire information — gathered in one mobile experience.</p>
+                </div>
+                <div class="feature-grid">
+                    <article class="feature feature-dark reveal"><span class="feature-icon">◎</span>
+                        <h3>Camera scanner</h3>
+                        <p>Guided camera capture helps users frame a tire for a clearer inspection image.</p>
+                        <div class="feature-foot"><span>01 / Capture</span><span>↗</span></div>
+                    </article>
+                    <article class="feature reveal"><span class="feature-icon">⌘</span>
+                        <h3>AI defect detection</h3>
+                        <p>YOLOv8 and CNN-based methods help classify visible tire damage in captured images.</p>
+                        <div class="feature-foot"><span>02 / Analyze</span><span>↗</span></div>
+                    </article>
+                    <article class="feature reveal"><span class="feature-icon">▤</span>
+                        <h3>DOT code scanner</h3>
+                        <p>Scan the tire sidewall's DOT code to help read available tire identification details.</p>
+                        <div class="feature-foot"><span>03 / Identify</span><span>↗</span></div>
+                    </article>
+                    <article class="feature reveal"><span class="feature-icon">▥</span>
+                        <h3>Health report</h3>
+                        <p>Review scan findings with a simple health-oriented summary and suggested next steps.</p>
+                        <div class="feature-foot"><span>04 / Understand</span><span>↗</span></div>
+                    </article>
+                    <article class="feature reveal"><span class="feature-icon">◷</span>
+                        <h3>Scan history</h3>
+                        <p>Return to previous inspection results and track recorded tire observations over time.</p>
+                        <div class="feature-foot"><span>05 / Track</span><span>↗</span></div>
+                    </article>
+                    <article class="feature reveal"><span class="feature-icon">⌖</span>
+                        <h3>Nearby shops</h3>
+                        <p>Find nearby vulcanizing shops or service centers when a tire needs expert attention.</p>
+                        <div class="feature-foot"><span>06 / Get help</span><span>↗</span></div>
+                    </article>
+                </div>
             </div>
-          </div>
+        </section>
+        <section class="section" id="detect">
+            <div class="wrap">
+                <div class="section-head">
+                    <div>
+                        <p class="index">03 / DETECTION FOCUS</p>
+                        <h2>Spot the signs.</h2>
+                    </div>
+                    <p>InTIRE focuses on visible tire conditions. Lighting, image quality, dirt, and other obstructions
+                        may affect detection.</p>
+                </div>
+                <div class="detect-grid">
+                    <article class="detect reveal"><span class="detect-icon">⌁</span>
+                        <h3>Cracks</h3>
+                        <p>Surface or sidewall cracking that may signal tire aging or damage.</p>
+                    </article>
+                    <article class="detect reveal"><span class="detect-icon">⌒</span>
+                        <h3>Bulges</h3>
+                        <p>Raised areas that can indicate a possible weakness in the tire structure.</p>
+                    </article>
+                    <article class="detect reveal"><span class="detect-icon">⊕</span>
+                        <h3>Punctures</h3>
+                        <p>Visible holes or foreign objects that may lead to air loss.</p>
+                    </article>
+                    <article class="detect reveal"><span class="detect-icon">▥</span>
+                        <h3>Worn treads</h3>
+                        <p>Visible tread wear that may reduce grip and needs closer assessment.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+        <section class="section alt" id="how">
+            <div class="wrap">
+                <div class="section-head">
+                    <div>
+                        <p class="index">04 / THE FLOW</p>
+                        <h2>Four steps. More awareness.</h2>
+                    </div>
+                </div>
+                <ol class="steps">
+                    <li class="step reveal"><span class="step-num">01</span>
+                        <h3>Scan</h3>
+                        <p>Open the app and capture a clear image of the tire.</p>
+                    </li>
+                    <li class="step reveal"><span class="step-num">02</span>
+                        <h3>Analyze</h3>
+                        <p>The image is processed by InTIRE's trained detection model.</p>
+                    </li>
+                    <li class="step reveal"><span class="step-num">03</span>
+                        <h3>Review</h3>
+                        <p>Check the visible defect findings presented by the app.</p>
+                    </li>
+                    <li class="step reveal"><span class="step-num">04</span>
+                        <h3>Act</h3>
+                        <p>Use the result as a guide and consult a qualified mechanic when needed.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+        <section class="section" id="technology">
+            <div class="wrap tech-panel reveal">
+                <div>
+                    <p class="eyebrow">Built with applied AI</p>
+                    <h2>Technology with a purpose.</h2>
+                    <p>InTIRE brings computer vision concepts into a mobile tire inspection workflow, with a focus on
+                        making visible damage easier to notice and understand.</p>
+                </div>
+                <div class="tech-badges"><span class="tech-badge">YOLOv8</span><span class="tech-badge">CNN</span><span
+                        class="tech-badge">Computer vision</span><span class="tech-badge">Mobile app</span><span
+                        class="tech-badge">Applied AI</span></div>
+            </div>
+        </section>
+        <section class="section alt" id="screenshots">
+            <div class="wrap">
+                <div class="section-head">
+                    <div>
+                        <p class="index">05 / PRODUCT PREVIEW</p>
+                        <h2>Designed for the real world.</h2>
+                    </div>
+                    <p>A quick look at the scan, results, and history experiences.</p>
+                </div>
+                <div class="phone-row">
+                    <div class="phone-card reveal">
+                        <div class="phone-screen">
+                            <div class="mock-top"></div>
+                            <div class="viewfinder"></div>
+                            <div class="mock-caption">POSITION TIRE IN FRAME</div>
+                        </div>
+                    </div>
+                    <div class="phone-card reveal">
+                        <div class="phone-screen">
+                            <div class="mock-top"></div>
+                            <div class="score">82<span>%</span></div>
+                            <div class="score-label">TREAD HEALTH · SAMPLE UI</div>
+                            <div class="bar"></div>
+                            <div class="bar short"></div>
+                        </div>
+                    </div>
+                    <div class="phone-card reveal">
+                        <div class="phone-screen">
+                            <div class="mock-top"></div>
+                            <div class="history-row"></div>
+                            <div class="history-row"></div>
+                            <div class="history-row"></div>
+                            <div class="mock-caption">YOUR SCAN HISTORY</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section" id="access">
+            <div class="wrap">
+                <div class="access-panel reveal">
+                    <div>
+                        <p class="eyebrow">Ready when you are</p>
+                        <h2>Bring InTIRE<br>along for the drive.</h2>
+                        <p>Open the web demo or download the Android application to explore the InTIRE experience.</p>
+                        <p class="download-note">Android APK · v1.0 · If the download does not start, <a
+                                href="https://github.com/itschellay/InTIRE_App/releases/download/v1.0/InTIRE-App.apk"
+                                target="_blank" rel="noopener">open the direct link</a>.</p>
+                    </div>
+                    <div class="access-buttons"><a href="https://Intire-Application-docker.onrender.com"
+                            class="btn dark-btn" target="_blank" rel="noopener">Open web demo ↗</a><a id="downloadBtn"
+                            href="https://github.com/itschellay/InTIRE_App/releases/download/v1.0/InTIRE-App.apk"
+                            class="btn outline" download="InTIRE-App.apk">Download APK ↓</a></div>
+                </div>
+            </div>
+        </section>
+        <section class="section alt" id="developers">
+            <div class="wrap">
+                <div class="section-head">
+                    <div>
+                        <p class="index">06 / THE TEAM</p>
+                        <h2>People behind the project.</h2>
+                    </div>
+                    <p>The BSIT thesis team working to make tire inspection more accessible.</p>
+                </div>
+                <div class="dev-grid">
+                    <article class="dev reveal"><span class="avatar">JA</span>
+                        <h3>Julia Allary Velasco Aquino</h3><span class="role">AI Trainer &amp; Developer</span>
+                    </article>
+                    <article class="dev reveal"><span class="avatar">KC</span>
+                        <h3>Karylle Guevarra Cabrido</h3><span class="role">Programmer &amp; Developer</span>
+                    </article>
+                    <article class="dev reveal"><span class="avatar">AS</span>
+                        <h3>Anne Ritchel De Guzman Sumague</h3><span class="role">Project Lead, Programmer &amp;
+                            Developer</span>
+                    </article>
+                    <article class="dev reveal"><span class="avatar">AT</span>
+                        <h3>Akhicia Mae Calangi Torreliza</h3><span class="role">Client Liaison, Programmer &amp; UI
+                            Developer</span>
+                    </article>
+                    <article class="dev reveal"><span class="avatar">RV</span>
+                        <h3>Rochelle Mae Dela Cruz Velasco</h3><span class="role">Programmer &amp; Developer</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <div class="wrap card thesis reveal">
+                <div>
+                    <p class="eyebrow">Research project</p>
+                    <h3>InTIRE: A Mobile Application for Tire Defect Inspection Using Deep Learning and CNN-Powered
+                        Image Detection.</h3>
+                    <p>PUP Sto. Tomas Campus · Bachelor of Science in Information Technology</p>
+                </div><span class="thesis-label">THESIS / 2026</span>
+            </div>
+        </section>
+        <section class="notice">
+            <div class="wrap notice-inner"><span class="notice-icon">⚠</span>
+                <p><strong>Important:</strong> InTIRE supports early awareness of visible tire damage. It is not a
+                    replacement for a certified mechanic or a complete physical inspection. Always have serious damage
+                    checked by a qualified professional.</p>
+            </div>
+        </section>
+        <section class="section" id="contact">
+            <div class="wrap">
+                <div class="section-head">
+                    <div>
+                        <p class="index">07 / SAY HELLO</p>
+                        <h2>Get in touch.</h2>
+                    </div>
+                    <p>Questions about the InTIRE project? Reach out to the team.</p>
+                </div>
+                <div class="contact-grid"><a href="mailto:intire.thesis@gmail.com" class="contact-link"><strong>✉ &nbsp;
+                            Email the team</strong><span>↗</span></a><a href="#access" class="contact-link"><strong>◎
+                            &nbsp; Try the application</strong><span>↗</span></a></div>
+            </div>
+        </section>
+    </main>
+    <footer class="site-footer">
+        <div class="wrap footer-inner">
+            <div class="footer-brand"><a href="#top" class="brand"><span class="logo-box"><img src="InTire-Logo.png"
+                            alt="" onerror="this.style.display='none';this.nextElementSibling.hidden=false"><span
+                            class="logo-fallback" hidden>iT</span></span><span><span class="brand-name">InTIRE<span
+                                style="color:var(--accent)">.</span></span><span class="brand-tag">AI tire defect
+                            inspection</span></span></a>
+                <p>Built by BSIT students at PUP Sto. Tomas Campus with a goal of making tire awareness more accessible.
+                </p>
+            </div>
+            <nav class="footer-nav" aria-label="Footer navigation"><a href="#top">Home</a><a href="#about">About</a><a
+                    href="#features">Features</a><a href="#developers">Developers</a><a href="#contact">Contact</a>
+            </nav>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="access">
-      <div class="wrap access-inner">
-        <div class="section-head">
-          <h2>Access InTIRE</h2>
-          <p class="section-sub">Try the web demo or download the mobile app.</p>
+        <div class="wrap footer-bottom">
+            <p>© 2026 InTIRE · Thesis project · Made for safer journeys.</p>
         </div>
-        <div class="access-actions">
-          <a href="https://Intire-Application-docker.onrender.com" class="btn btn-primary">Open</a>
-          <a href="https://github.com/itschellay/InTIRE_App/releases/download/v1.0/InTIRE-App.apk"
-            class="btn btn-outline">Download</a>
-        </div>
-        <div class="qr-block">
-          <div class="qr-code" aria-hidden="true">
-            <svg viewBox="0 0 100 100" width="96" height="96">
-              <rect width="100" height="100" fill="none" />
-              <g fill="currentColor">
-                <rect x="6" y="6" width="24" height="24" />
-                <rect x="12" y="12" width="12" height="12" fill="var(--bg)" />
-                <rect x="70" y="6" width="24" height="24" />
-                <rect x="76" y="12" width="12" height="12" fill="var(--bg)" />
-                <rect x="6" y="70" width="24" height="24" />
-                <rect x="12" y="76" width="12" height="12" fill="var(--bg)" />
-                <rect x="40" y="6" width="6" height="6" />
-                <rect x="52" y="6" width="6" height="6" />
-                <rect x="40" y="18" width="6" height="6" />
-                <rect x="60" y="40" width="6" height="6" />
-                <rect x="72" y="40" width="6" height="6" />
-                <rect x="84" y="46" width="6" height="6" />
-                <rect x="40" y="40" width="6" height="6" />
-                <rect x="40" y="52" width="6" height="6" />
-                <rect x="52" y="52" width="6" height="6" />
-                <rect x="40" y="70" width="6" height="6" />
-                <rect x="52" y="82" width="6" height="6" />
-                <rect x="64" y="70" width="6" height="6" />
-                <rect x="76" y="76" width="18" height="18" />
-                <rect x="60" y="84" width="6" height="6" />
-                <rect x="40" y="84" width="6" height="6" />
-              </g>
-            </svg>
-          </div>
-          <p class="qr-label">Scan to open InTIRE on your phone</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-alt" id="developers">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>Meet the developers</h2>
-          <p class="section-sub">The BSIT thesis team behind InTIRE.</p>
-        </div>
-        <div class="dev-grid">
-          <div class="dev-card">
-            <span class="dev-avatar">JA</span>
-            <h3>Julia Allary Velasco Aquino</h3>
-            <span class="dev-role">AI Trainer &amp; Developer</span>
-          </div>
-          <div class="dev-card">
-            <span class="dev-avatar">KC</span>
-            <h3>Karylle Guevarra Cabrido</h3>
-            <span class="dev-role">Programmer &amp; Developer</span>
-          </div>
-          <div class="dev-card">
-            <span class="dev-avatar">AS</span>
-            <h3>Anne Ritchel De Guzman Sumague</h3>
-            <span class="dev-role">Project Lead, Programmer &amp; Developer</span>
-          </div>
-          <div class="dev-card">
-            <span class="dev-avatar">AT</span>
-            <h3>Akhicia Mae Calangi Torreliza</h3>
-            <span class="dev-role">Client Liaison, Programmer &amp; UI Developer</span>
-          </div>
-          <div class="dev-card">
-            <span class="dev-avatar">RV</span>
-            <h3>Rochelle Mae Dela Cruz Velasco</h3>
-            <span class="dev-role">Programmer &amp; Developer</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section thesis-section" id="thesis">
-      <div class="wrap thesis-inner">
-        <h2>Thesis project</h2>
-        <p>InTIRE: A Mobile Application for Tire Defect Inspection Using Deep Learning and CNN-Powered Image Detection.
-        </p>
-        <p class="thesis-meta">PUP Sto. Tomas Campus · BSIT · in consultation with the Land Transportation Office</p>
-      </div>
-    </section>
-
-    <section class="notice-band">
-      <div class="wrap notice-inner">
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-          <path d="M12 3 2 20h20L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
-          <line x1="12" y1="9.5" x2="12" y2="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <circle cx="12" cy="17" r="1" fill="currentColor" />
-        </svg>
-        <p>InTIRE supports early awareness of tire damage. It is not a replacement for a certified mechanic — always
-          confirm serious damage in person.</p>
-      </div>
-    </section>
-
-    <section class="section" id="contact">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>Contact</h2>
-        </div>
-        <div class="contact-links">
-          <a href="#" class="contact-link">
-            <svg viewBox="0 0 24 24" width="20" height="20">
-              <path d="M14 9V7a2 2 0 0 1 2-2h2V2h-2a5 5 0 0 0-5 5v2H8v3h3v9h3v-9h3l1-3h-4Z" fill="currentColor" />
-            </svg>
-            Facebook
-          </a>
-          <a href="mailto:intire.thesis@gmail.com" class="contact-link">
-            <svg viewBox="0 0 24 24" width="20" height="20">
-              <rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
-              <path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-            Email
-          </a>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="site-footer">
-    <div class="wrap footer-inner">
-      <div class="footer-brand">
-        <span class="brand-logo-wrap footer-logo-wrap"><img src="InTire-Logo.png" alt="InTIRE"
-            class="brand-logo" /></span>
-        <p>AI tire defect inspection, built by BSIT students at PUP Sto. Tomas Campus.</p>
-      </div>
-      <nav class="footer-nav" aria-label="Footer">
-        <a href="#top">Home</a>
-        <a href="#about">About</a>
-        <a href="#features">Features</a>
-        <a href="#developers">Developers</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-    <div class="wrap footer-bottom">
-      <p>© 2026 InTIRE. Thesis project, PUP Sto. Tomas Campus.</p>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
+    </footer>
+    <script>
+        (() => {
+            const root = document.documentElement, toggle = document.getElementById('themeToggle'), icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel'), meta = document.querySelector('meta[name="theme-color"]');
+            const nav = document.getElementById('mainNav'), navToggle = document.getElementById('navToggle');
+            function applyTheme(theme) {root.setAttribute('data-theme', theme); const dark = theme === 'dark'; toggle.setAttribute('aria-pressed', String(dark)); toggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode'); icon.textContent = dark ? '☀' : '☾'; label.textContent = dark ? 'Light mode' : 'Dark mode'; meta.content = dark ? '#101110' : '#f6f5f0'; try {localStorage.setItem('intire-theme', theme)} catch (e) { } }
+            let saved = null; try {saved = localStorage.getItem('intire-theme')} catch (e) { } applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+            toggle.addEventListener('click', () => applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+            navToggle.addEventListener('click', () => {const open = nav.classList.toggle('open'); navToggle.setAttribute('aria-expanded', String(open)); navToggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu')});
+            nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {nav.classList.remove('open'); navToggle.setAttribute('aria-expanded', 'false')}));
+            document.addEventListener('click', e => {if (!nav.contains(e.target) && !navToggle.contains(e.target)) {nav.classList.remove('open'); navToggle.setAttribute('aria-expanded', 'false')} });
+            const items = document.querySelectorAll('.reveal'); if ('IntersectionObserver' in window) {const observer = new IntersectionObserver(entries => entries.forEach(entry => {if (entry.isIntersecting) {entry.target.classList.add('visible'); observer.unobserve(entry.target)} }), {threshold: .12}); items.forEach(item => observer.observe(item))} else items.forEach(item => item.classList.add('visible'));
+        })();
+    </script>
 </body>
 
 </html>
